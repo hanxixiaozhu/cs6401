@@ -7,5 +7,6 @@ from functools import partial
 def best_algo_test():
     pass
 
+
 # def sa_pick(problem)
 

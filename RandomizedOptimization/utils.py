@@ -3,6 +3,7 @@ import numpy as np
 from functools import partial
 import time
 import const
+import matplotlib.pyplot as plt
 
 
 def single_solve(problem, solver):
@@ -190,8 +191,19 @@ def experiment(problem, solvers, iteration, seed, criteria=0, maximum=True):
     return solver_scores, solver_times, solver_curve, solver_name
 
 
-def graphing(curves, labels):
-    pass
+def graphing_with_format(curves, legends, title):
+    curves = [cur[0][0] for cur in curves]
+    curves = np.array(curves)
+    graphing(curves, legends, title)
+
+
+def graphing(curves, legends, title):
+    for line in curves:
+        plt.plot(np.arange(1, len(line)+1), line)
+    plt.legend(legends)
+    plt.title(title)
+    plt.savefig(title)
+    plt.close()
 
 
 if __name__ == '__main__':
@@ -202,3 +214,4 @@ if __name__ == '__main__':
     a, b, c, d = experiment(problem2, None, 10, None)
 #     t1 = time.time()
 #     a,b,c,d = mimic_pick(problem2, 10, None)
+    curves = [cc[0][0] for cc in c]
