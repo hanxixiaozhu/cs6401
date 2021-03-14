@@ -2,10 +2,17 @@ import mlrose_hiive
 import numpy as np
 import utils
 import config
-from functools import partial
 
 
-def best_algo_experiment():
+def best_algo_experiment_easy():
+    """
+    run for simulation with the best hyperparam
+    """
+    problem = mlrose_hiive.FlipFlopOpt(length=20)
+    utils.experiment_graphing(problem, None, 5, None, 'AlternativeOne_20_Exp_BestAlgoCurve.png')
+
+
+def best_algo_experiment_hard():
     """
     run for simulation with the best hyperparam
     """
@@ -13,7 +20,7 @@ def best_algo_experiment():
     utils.experiment_graphing(problem, None, 5, None, 'AlternativeOneExp_BestAlgoCurve.png')
 
 
-# def sa_pick(problem)
 if __name__ == '__main__':
     np.random.seed(config.seed)
-    best_algo_experiment()
+    best_algo_experiment_hard()
+    best_algo_experiment_easy()

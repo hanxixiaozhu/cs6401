@@ -69,12 +69,12 @@ def solver_pick(problem, solver_list, iteration, seed, criteria=0, maximum=True)
     return best_solver, solver_score, solver_time, best_idx, best_curve_hist
 
 
-def rhc_pick(problem, iteration, seed, criteria=0, maximum=True, curve=True):
+def rhc_pick(problem, iteration, seed, criteria=0, maximum=True, curve=True, restarts=0):
     # max_attemps = list(range(5, 30, 5))
     max_attemps = np.arange(5, 30, 5)
     solver_list = []
     for ma in max_attemps:
-        solver = partial(mlrose_hiive.random_hill_climb, max_attempts=ma.item(), curve=curve)
+        solver = partial(mlrose_hiive.random_hill_climb, max_attempts=ma.item(), curve=curve, restarts=restarts)
         solver_list.append(solver)
     best_rhc, best_score, best_time, best_idx, best_curve = \
         solver_pick(problem, solver_list, iteration, seed, criteria, maximum)
@@ -166,6 +166,7 @@ def experiment(problem, solvers, iteration, seed, criteria=0, maximum=True, mimi
             mimic_pick(problem, mimic_iteration, seed, criteria, maximum)
         score_collection = [bs_rhc, bs_sa, bs_ga, bs_mimic]
         time_collection = [bf_rhc, bf_sa, bf_ga, bf_mimic]
+        # arg_collection = [bk_rhc, bk_sa, bk_ga, bk_mimic]
         curve_collection = [bc_rhc, bc_sa, bc_ga, bc_mimic]
 
         # score_collection = [bs_rhc, bs_sa]
@@ -177,6 +178,8 @@ def experiment(problem, solvers, iteration, seed, criteria=0, maximum=True, mimi
         # solver_times = [pick_shorttest_time(time_collection[i],
         #                                    time_collection[i]) for i in range(len(time_collection))]
         solver_times = [min(time_collection[i]) for i in range(len(time_collection))]
+        # solver_arg = [pick_shorttest_time(arg_collection[i],
+        #                                   time_collection[i]) for i in range(len(time_collection))]
         solver_curve = [pick_shorttest_time(curve_collection[i],
                                             time_collection[i]) for i in range(len(time_collection))]
         solver_name = [const.rhc, const.sa, const.ga, const.mimic]
@@ -227,6 +230,40 @@ def experiment_graphing(problem, solvers, iteration, seed, title, criteria=0, ma
         string = f"{solver_name[i]}: best score: {solver_scores[i]}, avg time: {solver_times[i]}"
         print(string)
         recorder(string, f"{problem}_{solver_name[i]}_best_pick")
+
+
+def nn_select_best(result):
+    f1_train_collection = [result[i][0] for i in range(len(result))]
+    roc_test = [result[i][1] for i in range(len(result))]
+    f1_test_collection = [result[i][2] for i in range(len(result))]
+    confusion_matrix_test_collection = [result[i][3] for i in range(len(result))]
+    accuracy_train_collection = [result[i][4] for i in range(len(result))]
+    accuracy_test_collection = [result[i][5] for i in range(len(result))]
+    curve_collection = [result[i][6] for i in range(len(result))]
+
+    best_idx = int(np.argmax(f1_test_collection))
+
+    return f1_train_collection[best_idx], roc_test[best_idx], f1_test_collection[best_idx], \
+           confusion_matrix_test_collection[best_idx], accuracy_train_collection[best_idx], \
+           accuracy_test_collection[best_idx], curve_collection[best_idx], best_idx
+
+
+def nn_result_experiment(result, key_arg, learner_name, key_arg_names, avg_time_taken):
+    f1_train, roc_test, f1_test, conf_test, acc_train, acc_test, curve, best_idx = nn_select_best(result)
+    arg_dict = dict(zip(key_arg_names, key_arg[best_idx]))
+    string = f"{learner_name} with arguments {arg_dict} has roc area under curve {roc_test}, " \
+             f"f1 score on test set{f1_test}, accuracy rate on test set {acc_test}, " \
+             f"with average time each run {avg_time_taken}"
+    print(string)
+    recorder(string, f"nn_best_param_{learner_name}")
+
+    plt.plot(curve)
+    title = f'Loss of nn after each iteration - {learner_name}'
+    plt.title(title)
+    plt.savefig(title)
+    plt.close()
+
+
 
 
 # def approximate_time_experiment(problem, iteration, seed, time_limit):
