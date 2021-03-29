@@ -17,12 +17,14 @@ def em_experiment(x_train, y_train, x_test, y_test, cluster_nums, return_accurac
     si_score_collection, mi_collection, accuracy_collection = \
         utils.clustering_experiment(x_train, y_train, x_test, y_test, cluster_collections, return_accuracy_score)
     if graph:
-        if return_accuracy_score:
-            scores = [si_score_collection, mi_collection, accuracy_collection]
-            labels = [const.silhouette_score, const.adjusted_mutual_info_score, const.accuracy_score]
-        else:
-            scores = [si_score_collection, mi_collection]
-            labels = [const.silhouette_score, const.adjusted_mutual_info_score]
+        scores = [si_score_collection, mi_collection, accuracy_collection]
+        labels = [const.silhouette_score, const.adjusted_mutual_info_score, const.accuracy_score]
+        # if return_accuracy_score:
+        #     scores = [si_score_collection, mi_collection, accuracy_collection]
+        #     labels = [const.silhouette_score, const.adjusted_mutual_info_score, const.accuracy_score]
+        # else:
+        #     scores = [si_score_collection, mi_collection]
+        #     labels = [const.silhouette_score, const.adjusted_mutual_info_score]
         utils.experiment_graph(scores, title,
                                x_points=cluster_nums, label=labels)
 
@@ -62,4 +64,5 @@ def experiment_1():
 
 if __name__ == '__main__':
     np.random.seed(config.random_seed)
-    experiment_1()
+    # experiment_1()
+    digit_data_em_experiment()

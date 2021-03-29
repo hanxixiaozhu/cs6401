@@ -10,6 +10,7 @@ from sklearn.model_selection import train_test_split
 # from sklearn.model_selection import StratifiedKFold
 import l1_regularization
 import const
+import statistics
 
 
 def train_test_combine(x_train, y_train, x_test, y_test):
@@ -70,10 +71,10 @@ def clustering_experiment(x_train, y_train, x_test, y_test, clusters, return_acc
         print(cl)
         start = time.time()
         cl_fit = cl.fit(x)
-        try:
-            labels = cl_fit.labels_
-        except AttributeError:
-            labels = cl_fit.predict(x)
+        # try:
+        #     labels = cl_fit.labels_
+        # except AttributeError:
+        labels = cl_fit.predict(x)
         silhou = silhouette_score(x, labels)
         print("it takes ")
         print(time.time()-start)
@@ -82,7 +83,16 @@ def clustering_experiment(x_train, y_train, x_test, y_test, clusters, return_acc
         mi_score.append(mi)
         if return_accuracy_score:
             acc_sc = find_max_accuracy_score(y, labels)
-            acc_score.append(acc_sc)
+        else:
+            possible_labels = set(y)
+            acc_sc = 0
+            len_y = len(y)
+            for label in possible_labels:
+                group_l = labels[np.where(y == label)]
+                # len_group = len(group_l)
+                mode_len = len(np.where(group_l == statistics.mode(group_l))[0])
+                acc_sc += mode_len/len_y
+        acc_score.append(acc_sc)
     return si_scores, mi_score, acc_score
 
 
