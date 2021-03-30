@@ -7,6 +7,8 @@ import gaussian_mixture
 import data_generation as dg
 import pandas as pd
 import const
+import numpy as np
+import config
 
 
 def pca_apply(x_train, x_test, n_component):
@@ -141,6 +143,7 @@ def trading_em():
 
 
 if __name__ == '__main__':
+    np.random.seed(config.random_seed)
     print("start")
     digit_knn()
     print("knn")

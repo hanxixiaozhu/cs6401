@@ -7,7 +7,7 @@ import numpy as np
 import time
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
-# from sklearn.model_selection import StratifiedKFold
+from collections import Counter
 import l1_regularization
 import const
 import statistics
@@ -90,7 +90,11 @@ def clustering_experiment(x_train, y_train, x_test, y_test, clusters, return_acc
             for label in possible_labels:
                 group_l = labels[np.where(y == label)]
                 # len_group = len(group_l)
-                mode_len = len(np.where(group_l == statistics.mode(group_l))[0])
+                try:
+                    mode_len = len(np.where(group_l == statistics.mode(group_l))[0])
+                except statistics.StatisticsError:
+                    any_model = Counter(group_l).most_common(1)[0][0]
+                    mode_len = len(np.where(group_l == any_model)[0])
                 acc_sc += mode_len/len_y
         acc_score.append(acc_sc)
     return si_scores, mi_score, acc_score
