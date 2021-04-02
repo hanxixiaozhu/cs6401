@@ -24,5 +24,11 @@ def trade_x_selection():
     return l1_logistic_selection(trading_x_train, trading_y_train)
 
 
+def l1_exp():
+    x1, xi1 = digit_x_selection()
+    x2, xi2 = trade_x_selection()
+    print(f"digit data has {64 - len(xi1)} dropped, trading data has {20 - len(xi2)} dropped")
+
+
 if __name__ == '__main__':
-    x, xi = trade_x_selection()
+    l1_exp()

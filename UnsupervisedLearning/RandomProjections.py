@@ -2,6 +2,7 @@ from sklearn import random_projection
 import utils
 import data_generation as dg
 from sklearn.preprocessing import StandardScaler
+import numpy as np
 
 
 def random_project_apply(x):
@@ -29,5 +30,18 @@ def trading_data_rp_apply():
     return errors
 
 
+def error_variance():
+    trading_errors = []
+    digit_errors = []
+    for i in range(50):
+        e1 = digit_data_rp_apply()
+        e2 = trading_data_rp_apply()
+        digit_errors.append(e1)
+        trading_errors.append(e2)
+    string = f"digit data variance for each number component {np.std(digit_errors, axis=0)} \n" \
+             f"trading data variance for each number component {np.std(trading_errors, axis=0)} \n"
+    print(string)
+
+
 if __name__ == '__main__':
-    err = trading_data_rp_apply()
+    error_variance()

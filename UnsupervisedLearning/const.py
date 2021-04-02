@@ -44,3 +44,10 @@ digit_data_cluster_lc_roc_score = 'digit_data_cluster_lc_roc_score'
 
 trading_data_cluster_lc_f1_score = 'trading_data_cluster_lc_f1_score'
 trading_data_cluster_lc_roc_score = 'trading_data_cluster_lc_roc_score'
+
+trading_data_bmk_f1 = 'trading_data_bmk_f1'
+trading_data_bmk_roc = 'trading_data_bmk_roc'
+
+mean_error = 'mean_error'
+eigenvalues = 'eigenvalues'
+eigenvalues_ratio = 'eigenvalues_ratio'

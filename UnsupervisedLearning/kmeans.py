@@ -70,4 +70,3 @@ def experiment_1():
 if __name__ == '__main__':
     np.random.seed(config.random_seed)
     experiment_1()
-

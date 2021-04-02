@@ -105,19 +105,24 @@ part 2
 """
 
 
-def one_dr_apply(x, dr):
+def one_dr_apply(x, dr, return_type=const.mean_error):
     # transform is x*matrix
     x_dr = dr.fit_transform(x)
     # x_revert is x_dr * matrix^-1
-    revert_x = np.dot(x_dr, np.linalg.pinv(dr.components_.T))
-    mean_error = mean_squared_error(x, revert_x)
-    return mean_error
+    if return_type == const.mean_error:
+        revert_x = np.dot(x_dr, np.linalg.pinv(dr.components_.T))
+        mean_error = mean_squared_error(x, revert_x)
+        return mean_error
+    elif return_type == const.eigenvalues:
+        return dr.explained_variance_
+    elif return_type == const.eigenvalues_ratio:
+        return dr.explained_variance_ratio_
 
 
-def dr_apply_experiment(x, drs):
+def dr_apply_experiment(x, drs, return_type=const.mean_error):
     mean_errors = []
     for dr in drs:
-        mr = one_dr_apply(x, dr)
+        mr = one_dr_apply(x, dr, return_type)
         mean_errors.append(mr)
     return mean_errors
 
