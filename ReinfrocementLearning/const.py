@@ -12,3 +12,9 @@ Mean_V = 'Mean V'
 Iteration = 'Iteration'
 grid_world_small = 'grid_world_small'
 grid_world_big = 'grid_world_big'
+
+initial_policy = 'initial_policy'
+pi_initial_policies_set_name = ['zero', 'random']
+
+learning_rate = 'learning_rate'
+epsilon_decay = 'epsilon_decay'
