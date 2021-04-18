@@ -418,8 +418,33 @@ def ql_exp():
     big_ql_exp_analysis()
 
 
+def ql_ad_hoc():
+    p_grid, r_grid = gp()
+    dr = 0.95
+    training_iteration = np.arange(10000, 100000, 10000)
+    ql_collections = []
+    msg_collection = []
+    policy_collection = []
+    reward_collection = []
+    for i in range(len(training_iteration)):
+        # print(i)
+        ql = mdp.QLearning(p_grid, r_grid, gamma=dr, n_iter=training_iteration[i])
+        msg = ql.run()
+        msg_collection.append(msg)
+        ql_collections.append(ql)
+        policy = ql.policy
+        policy_collection.append(policy)
+        rq, pq = utils.policy_reward_cal(10, policy, p_grid, r_grid, dr, 10000)
+        reward_collection.append(np.mean(rq))
+    ql_table = pd.DataFrame(np.array(reward_collection).reshape(1, len(reward_collection)),
+                            columns=list(training_iteration), index=['mean reward'])
+    print("Q learning with different training iterations")
+    print(ql_table.to_string())
+
+
 if __name__ == '__main__':
     np.random.seed(config.rand_seed)
-    # vi_exp()
-    # pi_exp()
+    vi_exp()
+    pi_exp()
     ql_exp()
+    ql_ad_hoc()

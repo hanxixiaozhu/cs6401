@@ -18,3 +18,6 @@ pi_initial_policies_set_name = ['zero', 'random']
 
 learning_rate = 'learning_rate'
 epsilon_decay = 'epsilon_decay'
+
+forest_small = 'forest_small'
+forest_big = 'forest_big'

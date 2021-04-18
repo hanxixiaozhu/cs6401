@@ -29,7 +29,7 @@ def policy_reward_cal(num_step, policy, P, R, gamma, num_iter, initial_state=0):
         path = [cur_state]
         cur_gamma = 1
         for step in range(num_step):
-            cur_action = policy[cur_state]
+            cur_action = int(policy[cur_state])
             reward += (R[cur_state][cur_action] * cur_gamma)
             probability = P[cur_action][cur_state]
             cur_state = np.random.choice(list(range(len(probability))), p=probability)

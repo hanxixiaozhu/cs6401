@@ -1090,7 +1090,7 @@ class QLearning(MDP):
         # The following check won't be done in MDP()'s initialisation, so let's
         # do it here
         self.max_iter = int(n_iter)
-        assert self.max_iter >= 10000, "'n_iter' should be greater than 10000."
+        # assert self.max_iter >= 100, "'n_iter' should be greater than 100."
 
         if not skip_check:
             # We don't want to send this to MDP because _computePR should not
